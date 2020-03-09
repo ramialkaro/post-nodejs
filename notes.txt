@@ -1,0 +1,10 @@
+// create middleware 
+ 
+const firstMiddleware = (req, res, next) => {
+    console.log('middleware function')
+    next()
+} 
+
+// use middleware
+ app.use('/', firstMiddleware)
+ 
