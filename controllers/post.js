@@ -21,6 +21,7 @@ exports.updatePost=(req, res)=>{
     Post.findById(req.params.id, (err, post)=>{
         if(err) res.send(err)
         post.title = req.body.title
+        post.body = req.body.body
         post.save((err)=>{
             if(err) res.send(err)
             res.json({message: 'Post updated!'})
