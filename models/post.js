@@ -13,6 +13,10 @@ const postSchema = new mongoose.Schema({
         minlength: 4,
         maxlength: 1000
 
+    },
+    createdAt: {
+        type: String,
+        default: new Date,
     }
 })
 

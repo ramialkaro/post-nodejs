@@ -1,14 +1,15 @@
 const express = require('express')
 const {getPost, getPostById, deletePost, updatePost, createPost} = require('../controllers/post')
-const validator = require('../validatior/index')
+const {createPostValidator} = require('../validatior/index')
+const auth = require("../middleware/auth");
 
 const router = express.Router()
 
 
-router.get('/post',getPost)
-router.get('/post/:id',getPostById)
-router.delete('/post/:id', deletePost)
-router.put('/post/:id', updatePost)
-router.post('/post', validator.createPostValidator,createPost)
+router.get('/',auth,getPost)
+router.get('/:id',auth,getPostById)
+router.delete('/:id', auth,deletePost)
+router.put('/:id', auth,updatePost)
+router.post('/', createPostValidator,createPost)
 
 module.exports = router;

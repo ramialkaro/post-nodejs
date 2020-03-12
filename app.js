@@ -33,8 +33,8 @@ app.use('/', morgan("dev"))
 app.use(cookieParser()) */
 app.use(bodyParser.json())      // resoan of using bodyParser... because when send data req.body    it should be in JSON format. 
 app.use(expressValidator())
-app.use('/',postRoutes)
-app.use('/api/users', usersRoute)
+app.use('/post',postRoutes)
+app.use('/users', usersRoute)
 
 
 

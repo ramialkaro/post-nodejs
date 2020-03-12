@@ -9,16 +9,44 @@ exports.getPostById =(req, res)=>{
 
 }
 
-exports.deletePost=(req, res)=>{
-    Post.remove({_id:req.params.id}, (err, post)=>{
+exports.deletePost= async(req, res)=>{
+    try {
+        let post = await Post.findById(req.params.id)
+        if(!post){
+            return res.status(404).json({msg:'Post not found'})
+        }
+        await Post.findByIdAndRemove(req.params.id)
+        res.send('Successfully deleted')
+    } catch (error) {
+        console.log(err.message)
+        res.status(500).send('Server Error, delete post')
+    }
+    // old way...
+/*     Post.remove({_id:req.params.id}, (err, post)=>{
         if(err) res.send(err)
         res.json({message: 'Successfully deleted'})
-    })
+    }) */
 }
 
-exports.updatePost=(req, res)=>{
-    
-    Post.findById(req.params.id, (err, post)=>{
+exports.updatePost=async(req, res)=>{
+    const {title, body} = req.body
+    const updatedPost = {title, body}
+    try {
+        let post = await Post.findById(req.params.id)
+        if(!post){
+            res.status(404).json({msg: 'Post not found'})
+        }
+        post = await Post.findByIdAndUpdate(req.params.id, {$set: updatedPost}, {new: true})
+        res.send(post)
+    } catch (error) {
+        console.log(err.message)
+        res.status(500).send('Server Error, update post')
+    }
+
+
+
+    //old way...
+    /* Post.findById(req.params.id, (err, post)=>{
         if(err) res.send(err)
         post.title = req.body.title
         post.body = req.body.body
@@ -26,7 +54,7 @@ exports.updatePost=(req, res)=>{
             if(err) res.send(err)
             res.json({message: 'Post updated!'})
         })
-    })
+    }) */
 }
 exports.getPost = (req, res) => {
 
@@ -48,7 +76,7 @@ exports.getPost = (req, res) => {
  */
 
     // version 2 
-    const posts = Post.find().select("_id title body") // get all posts by Post(Schema from models) then use find(method to get all posts) 
+    const posts = Post.find() // get all posts by Post(Schema from models) then use find(method to get all posts) 
     .then((posts)=> {
         res.json({posts})
     })                  // since it's the same name no need for rename it.... also no need to make status 200 

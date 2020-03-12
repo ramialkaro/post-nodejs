@@ -4,9 +4,17 @@ const { User, validate } = require("../models/user.model");
 const express = require("express");
 const router = express.Router();
 
-router.get("/current", auth, async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password");
-  res.send(user);
+// get current user also there is auth so no one can access to user 
+
+router.get("/", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    res.send(user);  
+  } catch (error) {
+    console.log(err.message)
+    res.status(500).send('Server Error')
+  }
+  
 });
 
 router.post("/", async (req, res) => {
@@ -30,7 +38,8 @@ router.post("/", async (req, res) => {
   res.header("x-auth-token", token).send({
     _id: user._id,
     name: user.name,
-    email: user.email
+    email: user.email,
+    token
   });
 });
 
