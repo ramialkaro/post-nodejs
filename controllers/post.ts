@@ -18,7 +18,6 @@ exports.deletePost= async(req, res)=>{
         await Post.findByIdAndRemove(req.params.id)
         res.send('Successfully deleted')
     } catch (error) {
-        console.log(err.message)
         res.status(500).send('Server Error, delete post')
     }
     // old way...
@@ -39,7 +38,6 @@ exports.updatePost=async(req, res)=>{
         post = await Post.findByIdAndUpdate(req.params.id, {$set: updatedPost}, {new: true})
         res.send(post)
     } catch (error) {
-        console.log(err.message)
         res.status(500).send('Server Error, update post')
     }
 
